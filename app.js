@@ -392,16 +392,19 @@ async function handleLogout() {
   }
 }
 
-/* ========== PWA — Register Service Worker ========== */
+/* ========== PWA REGISTER SW (aman) ========== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('✅ SW registered:', reg.scope))
-      .catch((err) => console.warn('❌ SW error:', err));
+    navigator.serviceWorker.getRegistrations().then((regs) => {
+      regs.forEach((reg) => reg.unregister());
+      navigator.serviceWorker.register('/sw.js')
+        .then((reg) => console.log('✅ SW registered:', reg.scope))
+        .catch((err) => console.warn('❌ SW error:', err));
+    });
   });
 }
 
-/* ========== PWA — Install Prompt ========== */
+/* ========== PWA INSTALL PROMPT ========== */
 let deferredPrompt = null;
 
 window.addEventListener('beforeinstallprompt', (e) => {
